@@ -11,7 +11,6 @@ Description: |
   is downloaded from my Public Github repository,
   then deployed on Apache Web Server.
   
-  
 Resources:
   WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -26,7 +25,8 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
-WebServerHost:
+
+  WebServerHost:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: ami-0a8b4cd432b1c3063 
@@ -35,10 +35,10 @@ WebServerHost:
       SecurityGroupIds:
         - !Ref WebServerSecurityGroup
       Tags:
-        - key: Name 
-          value: !Sub Web Server of ${AWS::StackName} Stack
+        - Key: Name
+          Value: !Sub Web Server of ${AWS::StackName} Stack
       UserData: 
-         Fn::Base64:
+        Fn::Base64:
           !Sub |
             #! /bin/bash
             yum update -y
@@ -53,9 +53,8 @@ WebServerHost:
             systemctl start httpd
             systemctl enable httpd
 
-  
 Outputs:
- WebsiteURL:
+  WebsiteURL:
     Value: !Sub
       - http://${PublicAddress}
       - PublicAddress: !GetAtt WebServerHost.PublicDnsName
